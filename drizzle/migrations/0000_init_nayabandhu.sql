@@ -1,0 +1,47 @@
+create type public.app_role as enum ('admin','user');
+create table public.user_roles (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  role app_role not null,
+  unique (user_id, role)
+);
+grant select on public.user_roles to authenticated;
+grant all on public.user_roles to service_role;
+alter table public.user_roles enable row level security;
+create or replace function public.has_role(_user_id uuid, _role app_role)
+returns boolean language sql stable security definer set search_path = public
+as $$ select exists (select 1 from public.user_roles where user_id=_user_id and role=_role) $$;
+create policy "own roles readable" on public.user_roles for select to authenticated using (user_id = auth.uid() or public.has_role(auth.uid(),'admin'));
+
+create or replace function public.handle_new_user_role()
+returns trigger language plpgsql security definer set search_path = public as $$
+begin insert into public.user_roles(user_id, role) values (new.id,'user') on conflict do nothing; return new; end; $$;
+create trigger on_auth_user_created_role after insert on auth.users for each row execute function public.handle_new_user_role();
+
+create table public.conversations (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null,
+  title text not null default 'New conversation',
+  language text not null default 'English',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+grant select, insert, update, delete on public.conversations to authenticated;
+grant all on public.conversations to service_role;
+alter table public.conversations enable row level security;
+create policy "own conversations" on public.conversations for all to authenticated using (user_id = auth.uid()) with check (user_id = auth.uid());
+
+create table public.messages (
+  id uuid primary key default gen_random_uuid(),
+  conversation_id uuid not null references public.conversations(id) on delete cascade,
+  user_id uuid not null,
+  sdk_id text,
+  role text not null,
+  parts jsonb not null,
+  created_at timestamptz not null default now()
+);
+create index on public.messages(conversation_id, created_at);
+grant select, insert, update, delete on public.messages to authenticated;
+grant all on public.messages to service_role;
+alter table public.messages enable row level security;
+create policy "own messages" on public.messages for all to authenticated using (user_id = auth.uid()) with check (user_id = auth.uid());
