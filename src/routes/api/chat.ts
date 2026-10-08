@@ -12,7 +12,7 @@ import {
 const LANGS = ["English", "Kannada", "Hindi", "Tamil", "Telugu", "Malayalam"];
 
 const bodySchema = z.object({
-  conversationId: z.string().uuid(),
+  conversationId: z.union([z.string().uuid(), z.literal("guest")]),
   language: z.string().refine((l) => LANGS.includes(l)),
   messages: z.array(z.any()).min(1).max(200),
 });
@@ -38,14 +38,15 @@ export const Route = createFileRoute("/api/chat")({
     handlers: {
       POST: async ({ request }) => {
         const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-        if (!token) return json(401, "Please sign in.");
-
         const parsed = bodySchema.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return json(400, "Invalid request.");
         const { conversationId, language } = parsed.data;
         const messages = parsed.data.messages as UIMessage[];
+        const guest = conversationId === "guest";
+        if (guest) return streamAnswer(request, messages, language, messages.slice(-20));
+        if (!token) return json(401, "Please sign in.");
 
-        const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {
+        const supabase = createClient(process.env['SUPABASE_URL']!, process.env['SUPABASE_PUBLISHABLE_KEY']!, {
           global: { headers: { Authorization: `Bearer ${token}` } },
           auth: { persistSession: false, autoRefreshToken: false },
         });
@@ -75,58 +76,68 @@ export const Route = createFileRoute("/api/chat")({
           }
         }
 
-        const apiKey = process.env.LOVABLE_API_KEY;
-        if (!apiKey) return json(500, "AI is not configured.");
-        const runIdFetch = createLovableAiGatewayRunIdFetch(getLovableAiGatewayRunId(request));
-        const provider = createOpenAI({
-          baseURL: "https://ai.gateway.lovable.dev/v1",
-          apiKey,
-          headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
-          fetch: runIdFetch.fetch,
+        return streamAnswer(request, messages, language, messages, async (responseMessage) => {
+          const { error } = await supabase.from("messages").insert({
+            conversation_id: conversationId,
+            user_id: userId,
+            sdk_id: responseMessage.id,
+            role: "assistant",
+            parts: responseMessage.parts as never,
+          });
+          if (error) console.error("save assistant message", error);
+          await supabase.from("conversations").update({ updated_at: new Date().toISOString() }).eq("id", conversationId);
         });
-
-        const result = streamText({
-          model: provider.responses("openai/gpt-6-astra"),
-          instructions: systemPrompt(language),
-          messages: await convertToModelMessages(messages),
-          abortSignal: request.signal,
-          providerOptions: {
-            openai: {
-              forceReasoning: true,
-              reasoningEffort: "low",
-              reasoningSummary: "auto",
-              store: false,
-              include: ["reasoning.encrypted_content"],
-            },
-          },
-        });
-
-        return withLovableAiGatewayRunIdHeader(
-          result.toUIMessageStreamResponse({
-            originalMessages: messages,
-            sendReasoning: true,
-            onFinish: async ({ responseMessage }) => {
-              const { error } = await supabase.from("messages").insert({
-                conversation_id: conversationId,
-                user_id: userId,
-                sdk_id: responseMessage.id,
-                role: "assistant",
-                parts: responseMessage.parts as never,
-              });
-              if (error) console.error("save assistant message", error);
-              await supabase.from("conversations").update({ updated_at: new Date().toISOString() }).eq("id", conversationId);
-            },
-            onError: (e) => {
-              console.error(e);
-              const msg = String((e as Error)?.message ?? "");
-              if (msg.includes("429")) return "Too many requests — please wait a moment and try again.";
-              if (msg.includes("402")) return "AI credits are exhausted for this workspace.";
-              return "Something went wrong generating the answer.";
-            },
-          }),
-          runIdFetch,
-        );
       },
     },
   },
 });
+
+async function streamAnswer(
+  request: Request,
+  originalMessages: UIMessage[],
+  language: string,
+  history: UIMessage[],
+  save?: (m: UIMessage) => Promise<void>,
+) {
+  const apiKey = process.env['LOVABLE_API_KEY'];
+  if (!apiKey) return json(500, "AI is not configured.");
+  const runIdFetch = createLovableAiGatewayRunIdFetch(getLovableAiGatewayRunId(request));
+  const provider = createOpenAI({
+    baseURL: "https://ai.gateway.lovable.dev/v1",
+    apiKey,
+    headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
+    fetch: runIdFetch.fetch,
+  });
+  const result = streamText({
+    model: provider.responses("openai/gpt-6-astra"),
+    instructions: systemPrompt(language),
+    messages: await convertToModelMessages(history),
+    abortSignal: request.signal,
+    providerOptions: {
+      openai: {
+        forceReasoning: true,
+        reasoningEffort: "low",
+        reasoningSummary: "auto",
+        store: false,
+        include: ["reasoning.encrypted_content"],
+      },
+    },
+  });
+  return withLovableAiGatewayRunIdHeader(
+    result.toUIMessageStreamResponse({
+      originalMessages,
+      sendReasoning: true,
+      onFinish: async ({ responseMessage }) => {
+        if (save) await save(responseMessage);
+      },
+      onError: (e) => {
+        console.error(e);
+        const msg = String((e as Error)?.message ?? "");
+        if (msg.includes("429")) return "Too many requests — please wait a moment and try again.";
+        if (msg.includes("402")) return "AI credits are exhausted for this workspace.";
+        return "Something went wrong generating the answer.";
+      },
+    }),
+    runIdFetch,
+  );
+}

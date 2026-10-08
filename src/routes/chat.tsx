@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Outlet, useNavigate, useParams } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { ChatWindow } from "@/components/chat/ChatWindow";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LogOut, Menu, MessageSquare, Plus, Scale, ShieldAlert, Trash2 } from "lucide-react";
 import { z } from "zod";
@@ -31,9 +32,6 @@ function ChatLayout() {
   const params = useParams({ strict: false }) as { threadId?: string };
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    if (!loading && !user) navigate({ to: "/auth" });
-  }, [loading, user, navigate]);
 
   const { data: convos = [] } = useQuery({
     queryKey: convosKey,
@@ -54,7 +52,8 @@ function ChatLayout() {
     if (params.threadId === id) navigate({ to: "/chat" });
   }
 
-  if (!user) return <div className="grid min-h-screen place-items-center text-muted-foreground">Loading…</div>;
+  if (loading) return <div className="grid min-h-screen place-items-center text-muted-foreground">Loading…</div>;
+  if (!user) return <GuestChat />;
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -93,6 +92,23 @@ function ChatLayout() {
         <button className="m-3 self-start rounded-md border p-2 md:hidden" onClick={() => setOpen(true)} aria-label="Open conversations"><Menu className="h-4 w-4" /></button>
         <Outlet />
       </main>
+    </div>
+  );
+}
+
+function GuestChat() {
+  const { q } = Route.useSearch();
+  return (
+    <div className="flex h-screen flex-col">
+      <header className="flex items-center justify-between bg-primary px-5 py-3 text-primary-foreground">
+        <Link to="/" className="flex items-center gap-2">
+          <span className="grid h-8 w-8 place-items-center rounded-full border border-gold text-gold"><Scale className="h-4 w-4" /></span>
+          <span className="font-display">Nayabandhu</span>
+          <span className="ml-2 rounded-full bg-gold px-2 py-0.5 text-xs text-gold-foreground">Demo</span>
+        </Link>
+        <Link to="/auth" className="text-sm underline opacity-90">Sign in to save chats</Link>
+      </header>
+      <ChatWindow threadId="guest" initialMessages={[]} initialPrompt={q} guest />
     </div>
   );
 }
