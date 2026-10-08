@@ -30,7 +30,10 @@ function NewChat() {
       .select("id")
       .single();
     setBusy(false);
-    if (error) return toast.error("Could not start a conversation.");
+    if (error) {
+      toast.error("Could not start a conversation.");
+      return;
+    }
     qc.invalidateQueries({ queryKey: convosKey });
     navigate({ to: "/chat/$threadId", params: { threadId: data.id }, search: { q: text } });
   }
@@ -60,7 +63,7 @@ function NewChat() {
           ))}
         </div>
         <div className="mt-8">
-          <Composer initial={q} busy={busy} onSend={start} />
+          <Composer {...(q ? { initial: q } : {})} busy={busy} onSend={(t) => void start(t)} />
           <p className="mt-3 text-center text-xs text-muted-foreground">{DISCLAIMER}</p>
         </div>
       </div>
