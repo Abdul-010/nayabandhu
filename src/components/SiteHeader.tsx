@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Scale } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function SiteHeader() {
   const { user } = useAuth();
@@ -15,9 +16,13 @@ export function SiteHeader() {
           <span className="font-display text-lg">Nayabandhu</span>
         </Link>
         <nav className="flex items-center gap-1 text-sm sm:gap-4">
+          <Link to="/roadmap" className="px-2 opacity-80 hover:opacity-100" activeProps={{ className: "text-gold opacity-100" }}>
+            Roadmaps
+          </Link>
           <Link to="/emergency" className="px-2 opacity-80 hover:opacity-100" activeProps={{ className: "text-gold opacity-100" }}>
             Emergency rights
           </Link>
+          <ThemeToggle />
           <Button asChild size="sm" className="bg-gold text-gold-foreground hover:bg-gold/90">
             <Link to={user ? "/chat" : "/auth"}>{user ? "Open chat" : "Sign in"}</Link>
           </Button>
