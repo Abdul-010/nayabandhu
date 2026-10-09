@@ -22,7 +22,7 @@ function Index() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
-      <section className="bg-hero text-primary-foreground">
+      <section className="bg-hero text-navy-foreground">
         <div className="mx-auto grid max-w-6xl gap-12 px-5 pb-20 pt-14 md:grid-cols-[1.3fr_1fr] md:pt-24">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-gold">Nyaya · Bandhu — a friend in justice</p>
@@ -37,19 +37,19 @@ function Index() {
               <Button asChild size="lg" className="bg-gold text-gold-foreground hover:bg-gold/90">
                 <Link to="/chat">Ask a question <ArrowRight className="ml-1 h-4 w-4" /></Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-gold/50 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground">
+              <Button asChild size="lg" variant="outline" className="border-gold/50 bg-transparent text-navy-foreground hover:bg-navy-foreground/10 hover:text-navy-foreground">
                 <Link to="/emergency"><ShieldCheck className="mr-1 h-4 w-4" /> Emergency rights</Link>
               </Button>
             </div>
             <div className="mt-10 flex flex-wrap gap-2">
               {LANGUAGES.map((l) => (
-                <span key={l.code} className="rounded-full border border-primary-foreground/20 px-3 py-1 text-sm opacity-90">{l.label}</span>
+                <span key={l.code} className="rounded-full border border-navy-foreground/20 px-3 py-1 text-sm opacity-90">{l.label}</span>
               ))}
             </div>
           </div>
-          <aside className="self-end rounded-xl border border-gold/40 bg-primary/60 p-6 backdrop-blur">
+          <aside className="self-end rounded-xl border border-gold/40 bg-navy/40 p-6 backdrop-blur">
             <p className="flex items-center gap-2 font-display text-gold"><PhoneCall className="h-4 w-4" /> In danger right now?</p>
-            <ul className="mt-4 divide-y divide-primary-foreground/10">
+            <ul className="mt-4 divide-y divide-navy-foreground/10">
               {HELPLINES.slice(0, 4).map((h) => (
                 <li key={h.number} className="flex items-baseline justify-between py-2.5">
                   <span className="text-sm opacity-85">{h.name}</span>
