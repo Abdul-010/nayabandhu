@@ -14,7 +14,9 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as EmergencyRouteImport } from './routes/emergency'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as ApiRoadmapRouteImport } from './routes/api/roadmap'
 import { Route as ChatIndexRouteImport } from './routes/chat.index'
 import { Route as ChatThreadIdRouteImport } from './routes/chat.$threadId'
 
@@ -43,9 +45,19 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RoadmapRoute = RoadmapRouteImport.update({
+  id: '/roadmap',
+  path: '/roadmap',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRoadmapRoute = ApiRoadmapRouteImport.update({
+  id: '/api/roadmap',
+  path: '/api/roadmap',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChatIndexRoute = ChatIndexRouteImport.update({
@@ -65,7 +77,9 @@ export interface FileRoutesByFullPath {
   '/chat': typeof ChatRouteWithChildren
   '/emergency': typeof EmergencyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/roadmap': typeof RoadmapRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/roadmap': typeof ApiRoadmapRoute
   '/chat/$threadId': typeof ChatThreadIdRoute
   '/chat/': typeof ChatIndexRoute
 }
@@ -74,7 +88,9 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/emergency': typeof EmergencyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/roadmap': typeof RoadmapRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/roadmap': typeof ApiRoadmapRoute
   '/chat/$threadId': typeof ChatThreadIdRoute
   '/chat': typeof ChatIndexRoute
 }
@@ -85,7 +101,9 @@ export interface FileRoutesById {
   '/chat': typeof ChatRouteWithChildren
   '/emergency': typeof EmergencyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/roadmap': typeof RoadmapRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/roadmap': typeof ApiRoadmapRoute
   '/chat/$threadId': typeof ChatThreadIdRoute
   '/chat/': typeof ChatIndexRoute
 }
@@ -97,7 +115,9 @@ export interface FileRouteTypes {
     | '/chat'
     | '/emergency'
     | '/reset-password'
+    | '/roadmap'
     | '/api/chat'
+    | '/api/roadmap'
     | '/chat/$threadId'
     | '/chat/'
   fileRoutesByTo: FileRoutesByTo
@@ -106,7 +126,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/emergency'
     | '/reset-password'
+    | '/roadmap'
     | '/api/chat'
+    | '/api/roadmap'
     | '/chat/$threadId'
     | '/chat'
   id:
@@ -116,7 +138,9 @@ export interface FileRouteTypes {
     | '/chat'
     | '/emergency'
     | '/reset-password'
+    | '/roadmap'
     | '/api/chat'
+    | '/api/roadmap'
     | '/chat/$threadId'
     | '/chat/'
   fileRoutesById: FileRoutesById
@@ -127,7 +151,9 @@ export interface RootRouteChildren {
   ChatRoute: typeof ChatRouteWithChildren
   EmergencyRoute: typeof EmergencyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  RoadmapRoute: typeof RoadmapRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiRoadmapRoute: typeof ApiRoadmapRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -167,11 +193,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/roadmap': {
+      id: '/roadmap'
+      path: '/roadmap'
+      fullPath: '/roadmap'
+      preLoaderRoute: typeof RoadmapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
       fullPath: '/api/chat'
       preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/roadmap': {
+      id: '/api/roadmap'
+      path: '/api/roadmap'
+      fullPath: '/api/roadmap'
+      preLoaderRoute: typeof ApiRoadmapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chat/': {
@@ -209,7 +249,9 @@ const rootRouteChildren: RootRouteChildren = {
   ChatRoute: ChatRouteWithChildren,
   EmergencyRoute: EmergencyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  RoadmapRoute: RoadmapRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiRoadmapRoute: ApiRoadmapRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet, useNavigate, useParams } from "@tanstack
 import { useState } from "react";
 import { ChatWindow } from "@/components/chat/ChatWindow";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { LogOut, Menu, MessageSquare, Plus, Scale, ShieldAlert, Trash2 } from "lucide-react";
+import { LogOut, Map, Menu, MessageSquare, Plus, Scale, ShieldAlert, Trash2 } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -81,6 +81,7 @@ function ChatLayout() {
           ))}
         </nav>
         <div className="space-y-1 border-t border-sidebar-border p-3 text-sm">
+          <Link to="/roadmap" className="flex items-center gap-2 rounded-md px-3 py-2 text-sidebar-primary hover:bg-sidebar-accent"><Map className="h-4 w-4" /> Roadmap generator</Link>
           <Link to="/emergency" className="flex items-center gap-2 rounded-md px-3 py-2 text-sidebar-primary hover:bg-sidebar-accent"><ShieldAlert className="h-4 w-4" /> Emergency rights</Link>
           <button onClick={() => supabase.auth.signOut()} className="flex w-full items-center gap-2 rounded-md px-3 py-2 opacity-80 hover:bg-sidebar-accent">
             <LogOut className="h-4 w-4" /> <span className="truncate">Sign out · {user.email}</span>
