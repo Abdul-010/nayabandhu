@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Map, Scale } from "lucide-react";
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -128,7 +129,7 @@ function RoadmapPage() {
 
         {output && (
           <div className="prose-legal mt-8 rounded-lg border bg-card p-6 text-sm">
-            <ReactMarkdown>{output}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{output}</ReactMarkdown>
           </div>
         )}
 
