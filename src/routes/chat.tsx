@@ -1,4 +1,5 @@
 import { createFileRoute, Link, Outlet, useNavigate, useParams } from "@tanstack/react-router";
+import { useT, useI18n } from "@/lib/i18n";
 import { useState } from "react";
 import { ChatWindow } from "@/components/chat/ChatWindow";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -31,6 +32,7 @@ function ChatLayout() {
   const qc = useQueryClient();
   const params = useParams({ strict: false }) as { threadId?: string };
   const [open, setOpen] = useState(false);
+  const tr = useT();
 
 
   const { data: convos = [] } = useQuery({
@@ -64,7 +66,7 @@ function ChatLayout() {
         </Link>
         <div className="px-3">
           <Button asChild className="w-full justify-start bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90">
-            <Link to="/chat" onClick={() => setOpen(false)}><Plus className="mr-1 h-4 w-4" /> New conversation</Link>
+            <Link to="/chat" onClick={() => setOpen(false)}><Plus className="mr-1 h-4 w-4" /> {tr("New conversation")}</Link>
           </Button>
         </div>
         <nav className="mt-4 flex-1 space-y-0.5 overflow-y-auto px-3">
@@ -81,10 +83,10 @@ function ChatLayout() {
           ))}
         </nav>
         <div className="space-y-1 border-t border-sidebar-border p-3 text-sm">
-          <Link to="/roadmap" className="flex items-center gap-2 rounded-md px-3 py-2 text-sidebar-primary hover:bg-sidebar-accent"><Map className="h-4 w-4" /> Roadmap generator</Link>
-          <Link to="/emergency" className="flex items-center gap-2 rounded-md px-3 py-2 text-sidebar-primary hover:bg-sidebar-accent"><ShieldAlert className="h-4 w-4" /> Emergency rights</Link>
+          <Link to="/roadmap" className="flex items-center gap-2 rounded-md px-3 py-2 text-sidebar-primary hover:bg-sidebar-accent"><Map className="h-4 w-4" /> {tr("Roadmap generator")}</Link>
+          <Link to="/emergency" className="flex items-center gap-2 rounded-md px-3 py-2 text-sidebar-primary hover:bg-sidebar-accent"><ShieldAlert className="h-4 w-4" /> {tr("Emergency rights")}</Link>
           <button onClick={() => supabase.auth.signOut()} className="flex w-full items-center gap-2 rounded-md px-3 py-2 opacity-80 hover:bg-sidebar-accent">
-            <LogOut className="h-4 w-4" /> <span className="truncate">Sign out · {user.email}</span>
+            <LogOut className="h-4 w-4" /> <span className="truncate">{tr("Sign out")} · {user.email}</span>
           </button>
         </div>
       </aside>
@@ -99,15 +101,16 @@ function ChatLayout() {
 
 function GuestChat() {
   const { q } = Route.useSearch();
+  const tr = useT();
   return (
     <div className="flex h-screen flex-col">
       <header className="flex items-center justify-between bg-primary px-5 py-3 text-primary-foreground">
         <Link to="/" className="flex items-center gap-2">
           <span className="grid h-8 w-8 place-items-center rounded-full border border-gold text-gold"><Scale className="h-4 w-4" /></span>
           <span className="font-display">Nayabandhu</span>
-          <span className="ml-2 rounded-full bg-gold px-2 py-0.5 text-xs text-gold-foreground">Demo</span>
+          <span className="ml-2 rounded-full bg-gold px-2 py-0.5 text-xs text-gold-foreground">{tr("Demo")}</span>
         </Link>
-        <Link to="/auth" className="text-sm underline opacity-90">Sign in to save chats</Link>
+        <Link to="/auth" className="text-sm underline opacity-90">{tr("Sign in to save chats")}</Link>
       </header>
       <ChatWindow threadId="guest" initialMessages={[]} initialPrompt={q} guest />
     </div>

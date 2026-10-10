@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useT, useI18n } from "@/lib/i18n";
 import { ArrowUp, Square } from "lucide-react";
 
 export function Composer({
@@ -12,6 +13,7 @@ export function Composer({
   onSend: (text: string) => void;
   onStop?: () => void;
 }) {
+  const tr = useT();
   const [text, setText] = useState(initial ?? "");
   const ref = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
@@ -39,7 +41,7 @@ export function Composer({
             send();
           }
         }}
-        placeholder="Describe your situation or ask a legal question…"
+        placeholder={tr("Describe your situation or ask a legal question…")}
         className="max-h-48 min-h-11 flex-1 resize-none bg-transparent px-3 py-2.5 text-sm outline-none placeholder:text-muted-foreground"
       />
       {busy && onStop ? (

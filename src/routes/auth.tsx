@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useT, useI18n } from "@/lib/i18n";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -30,6 +31,7 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const tr = useT();
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -69,26 +71,26 @@ function AuthPage() {
     <div className="min-h-screen">
       <SiteHeader />
       <main className="mx-auto max-w-md px-5 py-16">
-        <h1 className="text-3xl">{mode === "signin" ? "Welcome back" : mode === "signup" ? "Create your account" : "Reset password"}</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Your conversations are private and saved to your account.</p>
+        <h1 className="text-3xl">{tr(mode === "signin" ? "Welcome back" : mode === "signup" ? "Create your account" : "Reset password")}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{tr("Your conversations are private and saved to your account.")}</p>
         <form onSubmit={submit} className="mt-8 space-y-4 rounded-xl border bg-card p-6 shadow-seal">
           <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{tr("Email")}</Label>
             <Input id="email" type="email" required maxLength={255} value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
           {mode !== "forgot" && (
             <div className="space-y-1.5">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{tr("Password")}</Label>
               <Input id="password" type="password" required minLength={6} maxLength={72} value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
           )}
           <Button type="submit" className="w-full" disabled={busy}>
-            {mode === "signin" ? "Sign in" : mode === "signup" ? "Sign up" : "Send reset link"}
+            {tr(mode === "signin" ? "Sign in" : mode === "signup" ? "Sign up" : "Send reset link")}
           </Button>
           {mode !== "forgot" && (
             <>
               <div className="flex items-center gap-3 text-xs text-muted-foreground"><span className="h-px flex-1 bg-border" />or<span className="h-px flex-1 bg-border" /></div>
-              <Button type="button" variant="outline" className="w-full" onClick={google}>Continue with Google</Button>
+              <Button type="button" variant="outline" className="w-full" onClick={google}>{tr("Continue with Google")}</Button>
             </>
           )}
         </form>
