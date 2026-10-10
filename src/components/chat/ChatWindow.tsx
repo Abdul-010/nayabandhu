@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Scale } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -99,7 +100,7 @@ export function ChatWindow({
                 <>
                   <span className="mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-full border border-gold text-gold"><Scale className="h-4 w-4" /></span>
                   <div className="prose-legal min-w-0 flex-1 text-sm">
-                    {m.parts.map((p, i) => (p.type === "text" ? <ReactMarkdown key={i}>{p.text}</ReactMarkdown> : null))}
+                    {m.parts.map((p, i) => (p.type === "text" ? <ReactMarkdown key={i} remarkPlugins={[remarkGfm]}>{p.text}</ReactMarkdown> : null))}
                   </div>
                 </>
               )}
