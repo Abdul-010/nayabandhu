@@ -1,16 +1,7 @@
-import { useEffect, useState } from "react";
+import { useI18n } from "@/lib/i18n";
 
-const KEY = "nayabandhu-language";
-
+// The whole site shares one language: changing it here translates every page.
 export function useLanguage() {
-  const [language, setLanguage] = useState("English");
-  useEffect(() => {
-    const saved = window.localStorage.getItem(KEY);
-    if (saved) setLanguage(saved);
-  }, []);
-  const set = (l: string) => {
-    setLanguage(l);
-    window.localStorage.setItem(KEY, l);
-  };
-  return [language, set] as const;
+  const { language, setLanguage } = useI18n();
+  return [language, setLanguage] as const;
 }

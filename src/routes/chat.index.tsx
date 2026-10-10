@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useT, useI18n } from "@/lib/i18n";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -19,6 +20,7 @@ function NewChat() {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const [language, setLanguage] = useLanguage();
+  const tr = useT();
   const [busy, setBusy] = useState(false);
 
   async function start(text: string) {
@@ -41,8 +43,8 @@ function NewChat() {
   return (
     <div className="flex flex-1 flex-col overflow-y-auto">
       <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-5 py-10">
-        <p className="text-xs uppercase tracking-[0.3em] text-gold">Namaste</p>
-        <h1 className="mt-2 text-3xl md:text-4xl">How can I help you today?</h1>
+        <p className="text-xs uppercase tracking-[0.3em] text-gold">{tr("Namaste")}</p>
+        <h1 className="mt-2 text-3xl md:text-4xl">{tr("How can I help you today?")}</h1>
         <div className="mt-5 flex flex-wrap gap-2">
           {LANGUAGES.map((l) => (
             <button
@@ -56,15 +58,15 @@ function NewChat() {
         </div>
         <div className="mt-8 grid gap-3 sm:grid-cols-2">
           {TOPICS.slice(0, 6).map((t) => (
-            <button key={t.title} onClick={() => start(t.prompt)} disabled={busy} className="rounded-lg border bg-card p-4 text-left transition hover:border-gold hover:shadow-seal">
-              <span className="font-display text-sm text-gold">{t.title}</span>
-              <span className="mt-1 block text-sm text-muted-foreground">{t.prompt}</span>
+            <button key={t.title} onClick={() => start(tr(t.prompt))} disabled={busy} className="rounded-lg border bg-card p-4 text-left transition hover:border-gold hover:shadow-seal">
+              <span className="font-display text-sm text-gold">{tr(t.title)}</span>
+              <span className="mt-1 block text-sm text-muted-foreground">{tr(t.prompt)}</span>
             </button>
           ))}
         </div>
         <div className="mt-8">
           <Composer {...(q ? { initial: q } : {})} busy={busy} onSend={(t) => void start(t)} />
-          <p className="mt-3 text-center text-xs text-muted-foreground">{DISCLAIMER}</p>
+          <p className="mt-3 text-center text-xs text-muted-foreground">{tr(DISCLAIMER)}</p>
         </div>
       </div>
     </div>

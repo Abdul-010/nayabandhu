@@ -1,3 +1,4 @@
+import { I18nProvider } from "@/lib/i18n";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -120,7 +121,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <I18nProvider><Outlet /></I18nProvider>
       <Toaster />
     </QueryClientProvider>
   );
