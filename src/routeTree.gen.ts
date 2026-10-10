@@ -17,6 +17,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiRoadmapRouteImport } from './routes/api/roadmap'
+import { Route as ApiTranslateRouteImport } from './routes/api/translate'
 import { Route as ChatIndexRouteImport } from './routes/chat.index'
 import { Route as ChatThreadIdRouteImport } from './routes/chat.$threadId'
 
@@ -60,6 +61,11 @@ const ApiRoadmapRoute = ApiRoadmapRouteImport.update({
   path: '/api/roadmap',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTranslateRoute = ApiTranslateRouteImport.update({
+  id: '/api/translate',
+  path: '/api/translate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChatIndexRoute = ChatIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/roadmap': typeof RoadmapRoute
   '/api/chat': typeof ApiChatRoute
   '/api/roadmap': typeof ApiRoadmapRoute
+  '/api/translate': typeof ApiTranslateRoute
   '/chat/$threadId': typeof ChatThreadIdRoute
   '/chat/': typeof ChatIndexRoute
 }
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/roadmap': typeof RoadmapRoute
   '/api/chat': typeof ApiChatRoute
   '/api/roadmap': typeof ApiRoadmapRoute
+  '/api/translate': typeof ApiTranslateRoute
   '/chat/$threadId': typeof ChatThreadIdRoute
   '/chat': typeof ChatIndexRoute
 }
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/roadmap': typeof RoadmapRoute
   '/api/chat': typeof ApiChatRoute
   '/api/roadmap': typeof ApiRoadmapRoute
+  '/api/translate': typeof ApiTranslateRoute
   '/chat/$threadId': typeof ChatThreadIdRoute
   '/chat/': typeof ChatIndexRoute
 }
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/roadmap'
     | '/api/chat'
     | '/api/roadmap'
+    | '/api/translate'
     | '/chat/$threadId'
     | '/chat/'
   fileRoutesByTo: FileRoutesByTo
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/roadmap'
     | '/api/chat'
     | '/api/roadmap'
+    | '/api/translate'
     | '/chat/$threadId'
     | '/chat'
   id:
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/roadmap'
     | '/api/chat'
     | '/api/roadmap'
+    | '/api/translate'
     | '/chat/$threadId'
     | '/chat/'
   fileRoutesById: FileRoutesById
@@ -154,6 +166,7 @@ export interface RootRouteChildren {
   RoadmapRoute: typeof RoadmapRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiRoadmapRoute: typeof ApiRoadmapRoute
+  ApiTranslateRoute: typeof ApiTranslateRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -214,6 +227,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRoadmapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/translate': {
+      id: '/api/translate'
+      path: '/api/translate'
+      fullPath: '/api/translate'
+      preLoaderRoute: typeof ApiTranslateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/chat/': {
       id: '/chat/'
       path: '/'
@@ -252,6 +272,7 @@ const rootRouteChildren: RootRouteChildren = {
   RoadmapRoute: RoadmapRoute,
   ApiChatRoute: ApiChatRoute,
   ApiRoadmapRoute: ApiRoadmapRoute,
+  ApiTranslateRoute: ApiTranslateRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
