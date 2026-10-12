@@ -97,14 +97,14 @@ function AuthPage() {
         <div className="mt-5 flex justify-between text-sm">
           {mode === "signin" ? (
             <>
-              <button className="underline" onClick={() => setMode("signup")}>Create account</button>
-              <button className="text-muted-foreground underline" onClick={() => setMode("forgot")}>Forgot password?</button>
+              <button className="underline" onClick={() => setMode("signup")}>{tr("Create account")}</button>
+              <button className="text-muted-foreground underline" onClick={() => setMode("forgot")}>{tr("Forgot password?")}</button>
             </>
           ) : (
-            <button className="underline" onClick={() => setMode("signin")}>Back to sign in</button>
+            <button className="underline" onClick={() => setMode("signin")}>{tr("Back to sign in")}</button>
           )}
         </div>
-        <p className="mt-10 text-center text-xs text-muted-foreground"><Link to="/">← Home</Link></p>
+        <p className="mt-10 text-center text-xs text-muted-foreground"><Link to="/">← {tr("Home")}</Link></p>
       </main>
     </div>
   );
