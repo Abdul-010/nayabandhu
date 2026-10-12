@@ -31,7 +31,7 @@ export const Route = createFileRoute("/api/translate")({
           model: provider.responses("openai/gpt-6-astra"),
           instructions: `Translate website UI text for an Indian legal-awareness app into ${language} (native script). Keep it natural and simple. Keep numbers, phone numbers, brand name "Nayabandhu", and legal citations (e.g. Article 22, BNSS, RTI) recognisable. Return ONLY a JSON array of strings, same length and order as the input.`,
           prompt: JSON.stringify(strings),
-          providerOptions: { openai: { reasoningEffort: "low", store: false } },
+          providerOptions: { openai: { store: false } },
         });
 
         try {
