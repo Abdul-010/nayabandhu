@@ -14,6 +14,7 @@ import { Route as AnalyzeRouteImport } from './routes/analyze'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as EmergencyRouteImport } from './routes/emergency'
+import { Route as LearnRouteImport } from './routes/learn'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as ApiAnalyzeRouteImport } from './routes/api/analyze'
@@ -46,6 +47,11 @@ const ChatRoute = ChatRouteImport.update({
 const EmergencyRoute = EmergencyRouteImport.update({
   id: '/emergency',
   path: '/emergency',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -95,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRouteWithChildren
   '/emergency': typeof EmergencyRoute
+  '/learn': typeof LearnRoute
   '/reset-password': typeof ResetPasswordRoute
   '/roadmap': typeof RoadmapRoute
   '/api/analyze': typeof ApiAnalyzeRoute
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/analyze': typeof AnalyzeRoute
   '/auth': typeof AuthRoute
   '/emergency': typeof EmergencyRoute
+  '/learn': typeof LearnRoute
   '/reset-password': typeof ResetPasswordRoute
   '/roadmap': typeof RoadmapRoute
   '/api/analyze': typeof ApiAnalyzeRoute
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRouteWithChildren
   '/emergency': typeof EmergencyRoute
+  '/learn': typeof LearnRoute
   '/reset-password': typeof ResetPasswordRoute
   '/roadmap': typeof RoadmapRoute
   '/api/analyze': typeof ApiAnalyzeRoute
@@ -142,6 +151,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/chat'
     | '/emergency'
+    | '/learn'
     | '/reset-password'
     | '/roadmap'
     | '/api/analyze'
@@ -156,6 +166,7 @@ export interface FileRouteTypes {
     | '/analyze'
     | '/auth'
     | '/emergency'
+    | '/learn'
     | '/reset-password'
     | '/roadmap'
     | '/api/analyze'
@@ -171,6 +182,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/chat'
     | '/emergency'
+    | '/learn'
     | '/reset-password'
     | '/roadmap'
     | '/api/analyze'
@@ -187,6 +199,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ChatRoute: typeof ChatRouteWithChildren
   EmergencyRoute: typeof EmergencyRoute
+  LearnRoute: typeof LearnRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   RoadmapRoute: typeof RoadmapRoute
   ApiAnalyzeRoute: typeof ApiAnalyzeRoute
@@ -230,6 +243,13 @@ declare module '@tanstack/react-router' {
       path: '/emergency'
       fullPath: '/emergency'
       preLoaderRoute: typeof EmergencyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -309,6 +329,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ChatRoute: ChatRouteWithChildren,
   EmergencyRoute: EmergencyRoute,
+  LearnRoute: LearnRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   RoadmapRoute: RoadmapRoute,
   ApiAnalyzeRoute: ApiAnalyzeRoute,
