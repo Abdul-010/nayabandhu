@@ -4,4 +4,5 @@
 - [x] Roadmap generator: step-by-step filing guides at /roadmap (all languages)
 - [x] Dark mode toggle
 - [x] PDF document analyzer at /analyze
-- [ ] Later: admin dashboard, legal knowledge base
+- [x] Legal knowledge base at /learn
+- [ ] Later: admin dashboard

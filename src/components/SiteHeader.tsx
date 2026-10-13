@@ -22,6 +22,9 @@ export function SiteHeader() {
           <Link to="/roadmap" className="px-2 opacity-80 hover:opacity-100" activeProps={{ className: "text-gold opacity-100" }}>
             {t("Roadmaps")}
           </Link>
+          <Link to="/learn" className="px-2 opacity-80 hover:opacity-100" activeProps={{ className: "text-gold opacity-100" }}>
+            {t("Learn")}
+          </Link>
           <Link to="/analyze" className="px-2 opacity-80 hover:opacity-100" activeProps={{ className: "text-gold opacity-100" }}>
             {t("Documents")}
           </Link>
