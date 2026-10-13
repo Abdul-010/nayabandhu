@@ -35,8 +35,14 @@ function AnalyzePage() {
 
   function pick(f: File | undefined) {
     if (!f) return;
-    if (f.type !== "application/pdf") return toast.error(tr("Only PDF files are supported."));
-    if (f.size > 10 * 1024 * 1024) return toast.error(tr("The PDF must be under 10 MB."));
+    if (f.type !== "application/pdf") {
+      toast.error(tr("Only PDF files are supported."));
+      return;
+    }
+    if (f.size > 10 * 1024 * 1024) {
+      toast.error(tr("The PDF must be under 10 MB."));
+      return;
+    }
     setFile(f);
     setOutput("");
   }
