@@ -3,4 +3,5 @@
 - [x] Demo access: use chat without signing in (guest, not saved)
 - [x] Roadmap generator: step-by-step filing guides at /roadmap (all languages)
 - [x] Dark mode toggle
-- [ ] Later: PDF document analyzer, admin dashboard, legal knowledge base
+- [x] PDF document analyzer at /analyze
+- [ ] Later: admin dashboard, legal knowledge base
