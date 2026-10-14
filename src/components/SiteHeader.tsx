@@ -5,10 +5,15 @@ import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LANGUAGES } from "@/lib/legal";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { checkIsAdmin } from "@/lib/admin.functions";
 
 export function SiteHeader() {
   const { user } = useAuth();
   const { t, language, setLanguage } = useI18n();
+  const isAdminFn = useServerFn(checkIsAdmin);
+  const { data: adminInfo } = useQuery({ queryKey: ["is-admin", user?.id], enabled: !!user, queryFn: () => isAdminFn(), retry: false });
   return (
     <header className="bg-primary text-primary-foreground">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
@@ -31,6 +36,11 @@ export function SiteHeader() {
           <Link to="/emergency" className="px-2 opacity-80 hover:opacity-100" activeProps={{ className: "text-gold opacity-100" }}>
             {t("Emergency rights")}
           </Link>
+          {adminInfo?.isAdmin && (
+            <Link to="/admin" className="px-2 opacity-80 hover:opacity-100" activeProps={{ className: "text-gold opacity-100" }}>
+              {t("Admin")}
+            </Link>
+          )}
           <select aria-label="Language" value={language} onChange={(e) => setLanguage(e.target.value)} className="rounded-md border border-gold/40 bg-primary px-2 py-1 text-sm text-primary-foreground">
             {LANGUAGES.map((l) => <option key={l.code} value={l.code}>{l.label}</option>)}
           </select>
