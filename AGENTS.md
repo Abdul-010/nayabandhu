@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Admin access is granted only via the user_roles table and checked server-side with has_role before any admin-client query; why: roles must never be client-controlled.
