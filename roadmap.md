@@ -5,4 +5,4 @@
 - [x] Dark mode toggle
 - [x] PDF document analyzer at /analyze
 - [x] Legal knowledge base at /learn
-- [ ] Later: admin dashboard
+- [x] Admin dashboard at /admin (admin role only)
