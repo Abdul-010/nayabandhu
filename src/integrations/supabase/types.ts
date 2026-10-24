@@ -41,6 +41,68 @@ export type Database = {
         }
         Relationships: []
       }
+      knowledge_chunks: {
+        Row: {
+          chunk_index: number
+          content: string
+          embedding: string
+          id: string
+          source_id: string
+        }
+        Insert: {
+          chunk_index: number
+          content: string
+          embedding: string
+          id?: string
+          source_id: string
+        }
+        Update: {
+          chunk_index?: number
+          content?: string
+          embedding?: string
+          id?: string
+          source_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_chunks_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "knowledge_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_sources: {
+        Row: {
+          chunk_count: number
+          content: string
+          created_at: string
+          created_by: string
+          id: string
+          kind: string
+          title: string
+        }
+        Insert: {
+          chunk_count?: number
+          content: string
+          created_at?: string
+          created_by: string
+          id?: string
+          kind: string
+          title: string
+        }
+        Update: {
+          chunk_count?: number
+          content?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          kind?: string
+          title?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           conversation_id: string
@@ -108,6 +170,20 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      match_knowledge_chunks: {
+        Args: {
+          match_count?: number
+          min_similarity?: number
+          query_embedding: string
+        }
+        Returns: {
+          chunk_index: number
+          content: string
+          similarity: number
+          source_id: string
+          source_title: string
+        }[]
       }
     }
     Enums: {

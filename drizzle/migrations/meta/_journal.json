@@ -8,6 +8,13 @@
       "when": 1791396348741,
       "tag": "0000_init_nayabandhu",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792850909532,
+      "tag": "0001_knowledge_sources_and_vector_search",
+      "breakpoints": true
     }
   ]
 }
