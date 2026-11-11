@@ -66,3 +66,27 @@ export const setAdminRole = createServerFn({ method: "POST" })
     if (res.error) throw new Error(res.error.message);
     return { ok: true };
   });
+
+export const listKnowledgeSources = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context as unknown as Ctx);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data, error } = await supabaseAdmin
+      .from("knowledge_sources")
+      .select("id, title, kind, chunk_count, created_at")
+      .order("created_at", { ascending: false });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+export const removeKnowledgeSource = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ sourceId: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context as unknown as Ctx);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("knowledge_sources").delete().eq("id", data.sourceId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
