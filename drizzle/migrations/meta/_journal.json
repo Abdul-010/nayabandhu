@@ -36,6 +36,13 @@
       "when": 1794403633727,
       "tag": "0004_restore_public_knowledge_search",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794403647822,
+      "tag": "0005_secure_knowledge_search_rpc",
+      "breakpoints": true
     }
   ]
 }
