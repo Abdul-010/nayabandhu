@@ -22,6 +22,13 @@
       "when": 1794403490984,
       "tag": "0002_knowledge_source_availability",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794403579923,
+      "tag": "0003_restrict_knowledge_search_rpc",
+      "breakpoints": true
     }
   ]
 }
