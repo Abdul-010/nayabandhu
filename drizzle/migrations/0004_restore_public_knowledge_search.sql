@@ -1,0 +1,1 @@
+GRANT EXECUTE ON FUNCTION public.match_knowledge_chunks(vector, integer, double precision) TO anon, authenticated, service_role;
