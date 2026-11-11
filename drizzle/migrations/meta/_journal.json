@@ -15,6 +15,34 @@
       "when": 1792850909532,
       "tag": "0001_knowledge_sources_and_vector_search",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794403490984,
+      "tag": "0002_knowledge_source_availability",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794403579923,
+      "tag": "0003_restrict_knowledge_search_rpc",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794403633727,
+      "tag": "0004_restore_public_knowledge_search",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794403647822,
+      "tag": "0005_secure_knowledge_search_rpc",
+      "breakpoints": true
     }
   ]
 }
