@@ -73,6 +73,30 @@ export type Database = {
           },
         ]
       }
+      knowledge_embedding_status: {
+        Row: {
+          blocked: boolean
+          safe_message: string | null
+          singleton: boolean
+          status_code: number | null
+          updated_at: string
+        }
+        Insert: {
+          blocked?: boolean
+          safe_message?: string | null
+          singleton?: boolean
+          status_code?: number | null
+          updated_at?: string
+        }
+        Update: {
+          blocked?: boolean
+          safe_message?: string | null
+          singleton?: boolean
+          status_code?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       knowledge_sources: {
         Row: {
           chunk_count: number
