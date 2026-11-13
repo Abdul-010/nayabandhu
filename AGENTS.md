@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Admin access is granted only via the user_roles table and checked server-side with has_role before any admin-client query; why: roles must never be client-controlled.
+- Document ingestion uses request-scoped server handlers and browser-side PDF text extraction; why: AI credentials and elevated database access must stay server-side.
