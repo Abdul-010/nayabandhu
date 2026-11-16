@@ -50,6 +50,13 @@
       "when": 1794580364452,
       "tag": "0006_knowledge_embedding_block_state",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794801915038,
+      "tag": "0007_secure_knowledge_search_rpc",
+      "breakpoints": true
     }
   ]
 }

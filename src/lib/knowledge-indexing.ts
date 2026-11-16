@@ -10,6 +10,7 @@ export class KnowledgeEmbeddingError extends Error {
   constructor(
     readonly status: number,
     message: string,
+    readonly pauseWorkspace = false,
   ) {
     super(message);
     this.name = "KnowledgeEmbeddingError";
@@ -121,7 +122,7 @@ async function requestEmbeddingBatch(apiKey: string, input: string[]): Promise<n
     const retryable = response.status === 429 || response.status >= 500;
     const accountProblem = /account|configuration|not registered|invalid api key/iu.test(message);
     if (!retryable || accountProblem || attempt === maxAttempts) {
-      throw new KnowledgeEmbeddingError(response.status, message);
+      throw new KnowledgeEmbeddingError(response.status, message, response.status === 402 || response.status === 403);
     }
     const retryAfter = Number(response.headers.get("Retry-After"));
     const delay = retryAfter > 0 ? retryAfter * 1000 : 500 * 2 ** (attempt - 1) + Math.floor(Math.random() * 300);
