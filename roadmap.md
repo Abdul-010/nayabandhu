@@ -6,4 +6,4 @@
 - [x] PDF document analyzer at /analyze
 - [x] Legal knowledge base at /learn
 - [x] Admin dashboard at /admin (admin role only)
-- [ ] Admin legal document library: PDF/text upload, indexing, source management, and cited grounding in chat
+- [x] Admin legal document library: PDF/text upload, indexing, source management, and cited grounding in chat

@@ -114,7 +114,7 @@ export function ChatWindow({
               {tr("Looking into the law…")}
             </div>
           )}
-          {error && <p className="text-sm text-destructive">{tr("The answer could not be completed. Please try again.")}</p>}
+          {error && <p className="text-sm text-destructive">{error.message || tr("The answer could not be completed. Please try again.")}</p>}
           <div ref={bottom} />
         </div>
       </div>
