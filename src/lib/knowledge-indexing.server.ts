@@ -10,6 +10,7 @@ export class KnowledgeEmbeddingError extends Error {
   constructor(
     readonly status: number,
     message: string,
+    readonly pauseWorkspace = false,
   ) {
     super(message);
     this.name = "KnowledgeEmbeddingError";
@@ -86,6 +87,16 @@ function safeMessage(payload: unknown, status: number): string {
     : `Document indexing is temporarily unavailable (HTTP ${status}).`;
 }
 
+function isWorkspaceBlock(payload: unknown, status: number): boolean {
+  if (status === 402) return true;
+  if (status !== 403 || !payload || typeof payload !== "object" || !("error" in payload)) return false;
+  const error = (payload as { error?: unknown }).error;
+  if (!error || typeof error !== "object") return false;
+  const details = error as { type?: unknown; props?: unknown };
+  const props = details.props && typeof details.props === "object" ? (details.props as { requires?: unknown }) : null;
+  return props?.requires === "admin_action" || props?.requires === "top_up" || details.type === "credit_limit_reached" || details.type === "ai_disabled";
+}
+
 async function requestEmbeddingBatch(apiKey: string, input: string[]): Promise<number[][]> {
   const maxAttempts = 3;
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
@@ -118,10 +129,11 @@ async function requestEmbeddingBatch(apiKey: string, input: string[]): Promise<n
 
     const payload = await response.json().catch(() => null);
     const message = safeMessage(payload, response.status);
+    const pauseWorkspace = isWorkspaceBlock(payload, response.status);
     const retryable = response.status === 429 || response.status >= 500;
     const accountProblem = /account|configuration|not registered|invalid api key/iu.test(message);
     if (!retryable || accountProblem || attempt === maxAttempts) {
-      throw new KnowledgeEmbeddingError(response.status, message);
+      throw new KnowledgeEmbeddingError(response.status, message, pauseWorkspace);
     }
     const retryAfter = Number(response.headers.get("Retry-After"));
     const delay = retryAfter > 0 ? retryAfter * 1000 : 500 * 2 ** (attempt - 1) + Math.floor(Math.random() * 300);
