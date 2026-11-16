@@ -1,7 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { chunkKnowledgeText, embedKnowledgeChunks, KnowledgeEmbeddingError } from "@/lib/knowledge-indexing.server";
 
 type Ctx = { supabase: { rpc: (fn: "has_role", args: { _user_id: string; _role: "admin" }) => PromiseLike<{ data: boolean | null }> }; userId: string };
 
@@ -103,6 +102,7 @@ export const createKnowledgeSource = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => knowledgeSourceInput.parse(input))
   .handler(async ({ data, context }) => {
     await assertAdmin(context as unknown as Ctx);
+    const { chunkKnowledgeText, embedKnowledgeChunks, KnowledgeEmbeddingError } = await import("@/lib/knowledge-indexing.server");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: status, error: statusError } = await supabaseAdmin
       .from("knowledge_embedding_status")
