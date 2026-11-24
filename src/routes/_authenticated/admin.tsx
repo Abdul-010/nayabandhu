@@ -8,7 +8,6 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { createKnowledgeSource, getAdminOverview, getKnowledgeIndexStatus, listKnowledgeSources, removeKnowledgeSource, resumeKnowledgeIndexing, setAdminRole } from "@/lib/admin.functions";
 import { useT } from "@/lib/i18n";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { extractPdfText } from "@/lib/extract-pdf";

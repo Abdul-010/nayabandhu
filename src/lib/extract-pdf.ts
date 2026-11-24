@@ -4,11 +4,12 @@ const MAX_PDF_PAGES = 50;
 const MAX_EXTRACTED_CHARACTERS = 200_000;
 
 export async function extractPdfText(file: File): Promise<string> {
-  const pdfjs = await import("pdfjs-dist/build/pdf.mjs");
+  const pdfjs = await import("pdfjs-dist");
   pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
-  const document = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+  const loadingTask = pdfjs.getDocument({ data: await file.arrayBuffer() });
+  const document = await loadingTask.promise;
   if (document.numPages > MAX_PDF_PAGES) {
-    await document.destroy();
+    await loadingTask.destroy();
     throw new Error("PDFs can contain up to 50 pages.");
   }
   const pages: string[] = [];
@@ -27,7 +28,7 @@ export async function extractPdfText(file: File): Promise<string> {
       }
     }
   } finally {
-    await document.destroy();
+    await loadingTask.destroy();
   }
   const text = pages.join("\n\n").trim();
   if (!text) throw new Error("No selectable text was found. Scanned-image PDFs are not supported yet.");

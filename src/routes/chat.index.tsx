@@ -11,6 +11,16 @@ import { useLanguage } from "@/components/chat/useLanguage";
 import { convosKey } from "./chat";
 
 export const Route = createFileRoute("/chat/")({
+  head: () => ({
+    meta: [
+      { title: "Start a Legal Chat — Nayabandhu" },
+      { name: "description", content: "Ask Nayabandhu about legal rights and procedures in India, in your chosen language." },
+      { property: "og:title", content: "Start a Legal Chat — Nayabandhu" },
+      { property: "og:description", content: "Start a multilingual legal-awareness conversation." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: NewChat,
 });
 

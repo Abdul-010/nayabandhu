@@ -8,6 +8,16 @@ import { ChatWindow } from "@/components/chat/ChatWindow";
 import { convosKey } from "./chat";
 
 export const Route = createFileRoute("/chat/$threadId")({
+  head: () => ({
+    meta: [
+      { title: "Saved Legal Conversation — Nayabandhu" },
+      { name: "description", content: "Continue a saved conversation about legal rights and procedures in India." },
+      { property: "og:title", content: "Saved Legal Conversation — Nayabandhu" },
+      { property: "og:description", content: "Continue your legal-awareness conversation in Nayabandhu." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: ThreadPage,
 });
 

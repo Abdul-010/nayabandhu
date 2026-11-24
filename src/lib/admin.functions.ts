@@ -102,7 +102,7 @@ export const createKnowledgeSource = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => knowledgeSourceInput.parse(input))
   .handler(async ({ data, context }) => {
     await assertAdmin(context as unknown as Ctx);
-    const { chunkKnowledgeText, embedKnowledgeChunks, KnowledgeEmbeddingError } = await import("@/lib/knowledge-indexing.server");
+    const { chunkKnowledgeText, embedKnowledgeChunks, KnowledgeEmbeddingError } = await import("@/lib/knowledge-indexing");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: status, error: statusError } = await supabaseAdmin
       .from("knowledge_embedding_status")
@@ -120,7 +120,7 @@ export const createKnowledgeSource = createServerFn({ method: "POST" })
     try {
       vectors = await embedKnowledgeChunks(apiKey, chunks);
     } catch (error) {
-      if (error instanceof KnowledgeEmbeddingError && (error.status === 402 || error.status === 403)) {
+      if (error instanceof KnowledgeEmbeddingError && error.pauseWorkspace) {
         await supabaseAdmin.from("knowledge_embedding_status").upsert({
           singleton: true,
           blocked: true,
